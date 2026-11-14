@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f172a">
+<title>Cek Pajak Kendaraan</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#f1f5f9;color:#0f172a}
+.wrap{max-width:480px;margin:auto;min-height:100vh;background:#f8fafc}.hero{background:linear-gradient(145deg,#0f172a,#1e293b);color:white;padding:34px 22px 42px;border-radius:0 0 28px 28px}
+.badge{display:inline-block;background:#ffffff18;border:1px solid #ffffff22;padding:7px 11px;border-radius:999px;font-size:12px;margin-bottom:18px}.hero h1{font-size:29px;line-height:1.12;margin:0 0 10px}.hero p{margin:0;color:#cbd5e1;font-size:14px;line-height:1.5}
+.card{margin:-22px 16px 0;background:white;border-radius:20px;padding:20px;box-shadow:0 12px 30px #0f172a12;position:relative}
+label{display:block;font-size:13px;font-weight:700;margin:0 0 8px}input,select{width:100%;border:1px solid #cbd5e1;border-radius:13px;padding:14px;font-size:16px;outline:none;background:white}input:focus,select:focus{border-color:#2563eb;box-shadow:0 0 0 3px #2563eb18}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{margin-bottom:15px}.btn{width:100%;border:0;border-radius:13px;padding:15px;background:#2563eb;color:white;font-size:16px;font-weight:800;cursor:pointer}.btn:active{transform:scale(.99)}
+.note{font-size:11px;color:#64748b;text-align:center;margin-top:11px}.result{display:none;margin:18px 16px 0}.result.show{display:block}.status{background:#dcfce7;color:#166534;border-radius:14px;padding:12px 14px;font-weight:800;font-size:13px;margin-bottom:12px}.result-card{background:white;border-radius:20px;padding:20px;box-shadow:0 8px 24px #0f172a0d}.result-head{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid #e2e8f0;padding-bottom:15px;margin-bottom:8px}.plate{font-size:25px;font-weight:900;letter-spacing:1px}.muted{font-size:12px;color:#64748b}.line{display:flex;justify-content:space-between;padding:13px 0;border-bottom:1px solid #f1f5f9;font-size:14px}.line strong{font-size:14px}.total{display:flex;justify-content:space-between;padding:17px 0 2px;font-size:16px;font-weight:900}.total span:last-child{color:#2563eb}.foot{text-align:center;padding:26px 18px;color:#94a3b8;font-size:11px;line-height:1.5}
+</style>
+</head>
+<body>
+<div class="wrap">
+<section class="hero">
+  <div class="badge">CEK KENDARAAN</div>
+  <h1>Cek Pajak Kendaraan</h1>
+  <p>Masukkan nomor polisi dan provinsi untuk melihat contoh informasi pajak kendaraan.</p>
+</section>
+
+<section class="card">
+  <form id="form">
+    <div class="field">
+      <label for="plat">Nomor Polisi</label>
+      <input id="plat" placeholder="Contoh: B 1234 ABC" autocomplete="off" required>
+    </div>
+    <div class="field">
+      <label for="prov">Provinsi</label>
+      <select id="prov" required>
+        <option value="">Pilih provinsi</option>
+        <option>DKI Jakarta</option><option>Jawa Barat</option><option>Jawa Tengah</option>
+        <option>Jawa Timur</option><option>Banten</option><option>Bali</option>
+        <option>Sumatera Utara</option><option>Sumatera Selatan</option><option>Sulawesi Selatan</option>
+        <option>DI Yogyakarta</option><option>Kalimantan Timur</option><option>Lainnya</option>
+      </select>
+    </div>
+    <div class="row">
+      <div class="field"><label for="tahun">Tahun Kendaraan</label><input id="tahun" type="number" min="1990" max="2026" placeholder="2019"></div>
+      <div class="field"><label for="jenis">Jenis</label><select id="jenis"><option>Sepeda Motor</option><option>Mobil</option></select></div>
+    </div>
+    <button class="btn" type="submit">CEK PAJAK</button>
+    <div class="note">Demo lokal — data hasil di bawah adalah data contoh.</div>
+  </form>
+</section>
+
+<section class="result" id="result">
+  <div class="status">✓ Status pajak: AKTIF</div>
+  <div class="result-card">
+    <div class="result-head">
+      <div><div class="plate" id="rPlat">B 1234 ABC</div><div class="muted" id="rProv">DKI Jakarta</div></div>
+      <div style="text-align:right"><div class="muted">Jatuh tempo</div><strong id="rTempo">12 Okt 2026</strong></div>
+    </div>
+    <div class="line"><span>Jenis kendaraan</span><strong id="rJenis">Sepeda Motor</strong></div>
+    <div class="line"><span>Tahun</span><strong id="rTahun">2019</strong></div>
+    <div class="line"><span>PKB</span><strong>Rp 1.250.000</strong></div>
+    <div class="line"><span>SWDKLLJ</span><strong>Rp 35.000</strong></div>
+    <div class="total"><span>Total</span><span>Rp 1.285.000</span></div>
+  </div>
+</section>
+
+<div class="foot">Website demo. Untuk pembayaran atau status pajak resmi, gunakan layanan Samsat/SIGNAL sesuai provinsi kendaraan.</div>
+</div>
+
+<script>
+const f=document.getElementById('form'), r=document.getElementById('result');
+f.addEventListener('submit',e=>{
+ e.preventDefault();
+ const plat=document.getElementById('plat').value.trim().toUpperCase();
+ const prov=document.getElementById('prov').value;
+ const tahun=document.getElementById('tahun').value||'2019';
+ const jenis=document.getElementById('jenis').value;
+ document.getElementById('rPlat').textContent=plat;
+ document.getElementById('rProv').textContent=prov;
+ document.getElementById('rTahun').textContent=tahun;
+ document.getElementById('rJenis').textContent=jenis;
+ r.classList.add('show');
+ r.scrollIntoView({behavior:'smooth',block:'start'});
+});
+</script>
+</body>
+</html>
